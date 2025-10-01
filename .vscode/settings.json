@@ -1,0 +1,5 @@
+{
+    "idf.pythonInstallPath": "/usr/bin/python3",
+    "editor.tabSize": 4,
+    "github.copilot.enable": true
+}
