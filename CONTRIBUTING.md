@@ -26,9 +26,36 @@ Welcome to the Embedded Architect mode! This workflow ensures all architectural 
 - ADR template: `docs/adr-template.md`
 - ADRs directory: `docs/adr/`
 
-## Additional Guidelines
-- Keep documentation clear and concise.
-- Discuss alternatives and rationale in ADRs.
-- Use consistent terminology and structure.
+
+## Development Lifecycle & Contribution Rules
+
+Development is performed incrementally. For each increment:
+1. **Planning:**
+   - Define all files and modules to be created or modified.
+   - Specify method/function signatures and document implementation instructions as comments in code.
+   - Plan documentation updates for any affected files (README, architecture.md, etc.).
+2. **Implementation:**
+   - Implement code for each method/function according to the documented instructions.
+   - Use AI tools (e.g., Copilot) for boilerplate, refactoring, and documentation, but always review logic and security manually.
+   - Note in comments or commit messages if code is AI-generated for traceability.
+3. **Code Quality & Testing:**
+   - Run code formatters (e.g., clang-format) and linters (e.g., cppcheck) before review.
+   - Implement or update unit/integration tests for new/modified code.
+   - Compile the code after each increment.
+   - If compilation errors occur, analyze and identify the root cause.
+   - Fix errors and recompile until the code builds successfully.
+4. **Documentation Update:**
+   - Update relevant documentation (README, architecture.md, module docs) as part of each increment.
+5. **Review:**
+   - Ensure code matches planned structure and instructions.
+   - Submit changes via pull request for review and approval.
+   - For minor changes or bug fixes, a streamlined process may be used (e.g., direct commit with clear documentation and code review).
+
+**AI Usage Guidelines:**
+- Use AI tools to accelerate development, but always verify correctness, security, and maintainability.
+- Prompt AI with clear instructions and review all generated code before merging.
+- Attribute AI-generated code in comments or commit messages.
+
+This process ensures professional, maintainable, and error-free code development, with best practices for AI-driven workflows and automated code quality.
 
 For questions, contact the Embedded Architect or project maintainer.

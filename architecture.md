@@ -21,6 +21,7 @@ This document provides an overview of the firmware architecture and summarizes a
 | Testing & QA | ESP-IDF Unity, automated unit/integration tests, hardware-in-the-loop | [ADR-008](docs/adr/ADR-008.md) |
 | Documentation & code standards | Doxygen-style comments, markdown docs, review checklists | [ADR-009](docs/adr/ADR-009.md) |
 | Performance optimization | Targeted profiling, event handling, hardware features | [ADR-010](docs/adr/ADR-010.md) |
+| Code quality & AI usage | clang-format, cppcheck, pre-commit hooks, AI-assisted development with review and attribution | [ADR-011](docs/adr/ADR-011.md) |
 
 *Add new decisions as ADRs are created and accepted.*
 

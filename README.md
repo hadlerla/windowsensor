@@ -23,20 +23,29 @@ This project uses an Embedded Architect mode to ensure all architectural decisio
 - **Basic Electronics Lab Tools**: Multimeter, oscilloscope, soldering station, logic analyzer (optional).
 - **Programming Tools**: USB-to-serial adapter, ESP32-C6 programming pins, jumper wires.
 
+
 ## Firmware Development
 
 - **Operating System**: Windows 10/11 with WSL2 (Ubuntu 22.04 LTS recommended)
 - **VS Code**: Editor with extensions:
-  - GitHub Copilot
-  - Espressif IDF Extension
-  - C/C++ Extension
-  - GitLens
-  - Markdown All in One
+	- GitHub Copilot (AI-assisted development; always review and verify AI-generated code)
+	- Espressif IDF Extension
+	- C/C++ Extension
+	- GitLens
+	- Markdown All in One
 - **ESP-IDF**: Espressif IoT Development Framework (v5.2 or latest stable)
 - **Python 3.8+**: Required for ESP-IDF tools
 - **Git**: Version control
 - **Unit Testing**: ESP-IDF Unity framework (`idf.py test`)
 - **Build & Flash Tools**: ESP-IDF build system (`idf.py build`, `idf.py flash`, `idf.py monitor`)
+- **Code Formatters & Linters**: clang-format (formatting), cppcheck (linting), pre-commit hooks recommended
+
+### Code Quality & Development Guidelines
+- Run code formatters and linters before submitting code for review.
+- Use AI tools for boilerplate and documentation, but always verify correctness, security, and maintainability.
+- Attribute AI-generated code in comments or commit messages.
+- Update documentation (README, architecture.md, module docs) as part of each increment.
+- For minor changes or bug fixes, a streamlined process may be used (e.g., direct commit with clear documentation and code review).
 
 ### Firmware Development Environment Setup Instructions
 
