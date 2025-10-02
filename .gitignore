@@ -27,6 +27,8 @@ Thumbs.db
 *.log
 # External dependencies and artifacts
 managed_components/
+# ESP-IDF managed components are restored automatically by the component manager.
+# Do NOT track managed_components/ in git. Track idf_component.yml and dependencies.lock instead.
 *.bin
 *.elf
 *.map
