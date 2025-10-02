@@ -25,3 +25,52 @@ Thumbs.db
 
 # Logs
 *.log
+# External dependencies and artifacts
+managed_components/
+*.bin
+*.elf
+*.map
+*.hex
+*.exe
+*.out
+*.a
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.zip
+*.tar
+*.gz
+*.7z
+*.rar
+*.swp
+*.swo
+*.tmp
+*.bak
+*.orig
+*.patch
+*.diff
+
+# Editor/IDE files
+.idea/
+.project
+.settings/
+.cproject
+.classpath
+
+# Misc
+*.sublime*
+*.iml
+*.db
+*.sqlite*
+*.pid
+*.pid.lock
+node_modules/
+coverage/
+dist/
+out/
+tmp/
+temp/
+test-results/
+test-output/
