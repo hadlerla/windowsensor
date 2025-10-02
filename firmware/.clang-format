@@ -1,0 +1,4 @@
+# clang-format configuration for fenstersensor firmware
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 100
