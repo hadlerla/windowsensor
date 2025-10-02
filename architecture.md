@@ -11,8 +11,16 @@ This document provides an overview of the firmware architecture and summarizes a
 
 | Decision | Summary | ADR Reference |
 |----------|---------|--------------|
-| (Example) Firmware update strategy | OTA updates not supported; flashing via programming pins only | [ADR-001](docs/adr/ADR-001.md) |
-| (Example) Sensor debouncing | Hardware debouncing using 74HC logic ICs | [ADR-002](docs/adr/ADR-002.md) |
+| System architecture | Modular component-based, FreeRTOS tasks, event-driven state management | [ADR-001](docs/adr/ADR-001.md) |
+| Hardware abstraction | HAL for sensor and peripheral access, debouncing logic | [ADR-002](docs/adr/ADR-002.md) |
+| Protocol stack integration | Dual protocol (Thread/Wi-Fi) with automatic fallback | [ADR-003](docs/adr/ADR-003.md) |
+| Power management | Event-driven sleep/wake, battery monitoring via ADC | [ADR-004](docs/adr/ADR-004.md) |
+| Security architecture | NVS encryption, secure boot, role-based access control | [ADR-005](docs/adr/ADR-005.md) |
+| Error handling & diagnostics | Structured logging, self-test, watchdog, persistent error logs | [ADR-006](docs/adr/ADR-006.md) |
+| Update & config management | Physical flashing, encrypted NVS, reset via setup button | [ADR-007](docs/adr/ADR-007.md) |
+| Testing & QA | ESP-IDF Unity, automated unit/integration tests, hardware-in-the-loop | [ADR-008](docs/adr/ADR-008.md) |
+| Documentation & code standards | Doxygen-style comments, markdown docs, review checklists | [ADR-009](docs/adr/ADR-009.md) |
+| Performance optimization | Targeted profiling, event handling, hardware features | [ADR-010](docs/adr/ADR-010.md) |
 
 *Add new decisions as ADRs are created and accepted.*
 
