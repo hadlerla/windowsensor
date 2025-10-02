@@ -1,3 +1,169 @@
+# Embedded Architect Mode
+
+This project uses an Embedded Architect mode to ensure all architectural decisions are documented, reviewed, and traceable.
+
+**Key Documents:**
+- [CONTRIBUTING.md](CONTRIBUTING.md): Contribution and architectural workflow
+- [architecture.md](architecture.md): Firmware architecture overview and summary of decisions
+- [ADR template](docs/adr-template.md): Reusable template for Architecture Decision Records (ADRs)
+- ADRs directory: `docs/adr/` (contains all ADRs)
+
+**Working Instructions:**
+1. Document all significant architectural questions as ADRs using the template.
+2. Store ADRs in `docs/adr/` and reference them in `architecture.md`.
+3. Follow the workflow in `CONTRIBUTING.md` for reviews and updates.
+4. Update `architecture.md` after each accepted ADR for easy reference.
+
+# Development Tools & Frameworks
+
+## Hardware Development
+
+- **KiCAD** (v8.x or latest stable): Schematic capture, PCB layout, BOM generation.
+- **Breadboard & ESP32-C6 Dev Board**: For prototyping and initial hardware validation.
+- **Basic Electronics Lab Tools**: Multimeter, oscilloscope, soldering station, logic analyzer (optional).
+- **Programming Tools**: USB-to-serial adapter, ESP32-C6 programming pins, jumper wires.
+
+## Firmware Development
+
+- **Operating System**: Windows 10/11 with WSL2 (Ubuntu 22.04 LTS recommended)
+- **VS Code**: Editor with extensions:
+  - GitHub Copilot
+  - Espressif IDF Extension
+  - C/C++ Extension
+  - GitLens
+  - Markdown All in One
+- **ESP-IDF**: Espressif IoT Development Framework (v5.2 or latest stable)
+- **Python 3.8+**: Required for ESP-IDF tools
+- **Git**: Version control
+- **Unit Testing**: ESP-IDF Unity framework (`idf.py test`)
+- **Build & Flash Tools**: ESP-IDF build system (`idf.py build`, `idf.py flash`, `idf.py monitor`)
+
+### Firmware Development Environment Setup Instructions
+
+1. **Install WSL2 and Ubuntu 22.04 LTS**
+	- Follow Microsoft’s official guide to enable WSL2 and install Ubuntu 22.04 LTS.
+	- Verify with: `wsl --list --verbose` (should show Ubuntu running in WSL2 mode).
+
+2. **Update Ubuntu Packages**
+	- `sudo apt update && sudo apt upgrade -y`
+	- Check: No errors, system up-to-date.
+
+3. **Install Required Packages**
+	- `sudo apt install git python3 python3-pip build-essential cmake ninja-build flex bison gperf libssl-dev libffi-dev libusb-1.0-0 libusb-1.0-0-dev python3-setuptools python3-serial python3-click python3-cryptography python3-future python3-pyparsing python3-pyelftools`
+	- Check: All packages install without error.
+
+4. **Install VS Code (Windows host)**
+	- Download and install from [code.visualstudio.com](https://code.visualstudio.com/).
+	- Install recommended extensions (see above).
+	- Check: VS Code launches, extensions installed.
+
+5. **Install ESP-IDF (v5.2 or latest stable)**
+	- Follow Espressif’s official [Get Started guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html):
+	  - Clone ESP-IDF: `git clone --recursive https://github.com/espressif/esp-idf.git`
+	  - Checkout latest stable: `cd esp-idf && git checkout v5.2`
+	  - Run install script: `./install.sh`
+	  - Set up environment: `source export.sh`
+	- Check: `idf.py --version` returns v5.2 or latest stable.
+
+6. **Verify Python Environment**
+	- `python3 --version` (should be >= 3.8)
+	- `pip3 --version`
+	- Check: No errors, correct versions.
+
+7. **Clone Project Repository**
+	- `git clone <repo-url>`
+	- `cd firmware-fenstersensor`
+	- Check: Repository cloned, files present.
+
+8. **Build Example Project**
+	- `idf.py build`
+	- Check: Build completes without errors, `build/` directory created.
+
+9. **Flash Firmware to ESP32-C6**
+	- Connect dev board via USB.
+	- `idf.py flash`
+	- Check: Flash completes, device boots.
+
+10. **Monitor Serial Output**
+	 - `idf.py monitor`
+	 - Check: Serial output visible, device running.
+
+11. **Run Unit Tests**
+	 - `idf.py test`
+	 - Check: All tests pass, Unity test results shown.
+
+12. **Git Version Control**
+	 - `git status`, `git log`, `git push/pull`
+	 - Check: No errors, repository syncs with remote.
+
+**Checkpoint Summary:**
+- WSL2 and Ubuntu installed and updated
+- VS Code and extensions installed
+- ESP-IDF installed and verified
+- Python and dependencies installed
+- Project cloned and builds successfully
+- Firmware flashes and runs on hardware
+- Unit tests pass
+- Git workflow operational
+
+## Mechanical Engineering
+
+- **FreeCAD** (v0.22 or latest stable): 3D modeling, mechanical part design, export to STL/STEP for printing/manufacturing.
+- **3D Printer**: For prototyping enclosures (PLA, ABS, PETG recommended).
+- **CAD File Management**: Use Git for versioning CAD files and documentation.
+
+---
+
+# Product Iterations
+
+### Iteration 1: Matter over Wi-Fi
+- Device operates using Matter protocol over Wi-Fi.
+- Wi-Fi configuration via temporary access point and secure web interface (see Wi-Fi Configuration section).
+- Simplified commissioning and setup for development and initial deployment.
+
+### Iteration 2: Matter over Thread (Zigbee-based) with Wi-Fi Fallback
+- Device operates using Matter protocol over Thread (Zigbee-based) for mesh networking and low power.
+- Wi-Fi fallback supported for environments without Thread.
+- Commissioning and setup process supports both Thread and Wi-Fi, using the same device PIN for authentication.
+
+## Device Mode Configuration and Fallback (Best Practices)
+
+- Both Matter over Wi-Fi and Matter over Thread operate on the same hardware (ESP32-C6).
+- On boot, the device automatically attempts to join a Thread network; if unavailable, it falls back to Wi-Fi.
+- Users can select the preferred network mode (Thread or Wi-Fi) via the configuration web interface or a mobile app.
+- The status LED indicates the current network mode (e.g., different colors or blink patterns).
+- The last successful network mode is saved in non-volatile storage, so the device remembers its configuration after reboot.
+- Pressing and holding the setup button resets the network mode and triggers reconfiguration.
+- Documentation and user guides should clearly explain fallback logic and manual mode switching.
+
+## Wi-Fi Configuration
+
+- On first boot or after a Wi-Fi reset, the device starts in configuration mode and creates a temporary Wi-Fi access point (AP).
+- The AP SSID is unique to each device (e.g., `WindowSensor-<last6MAC>`).
+- The user connects to the AP using a smartphone or computer.
+- After connecting, the user accesses a simple web interface (e.g., at `192.168.4.1`) to enter their home Wi-Fi credentials (SSID and password).
+- The configuration webpage requires the device PIN (the same PIN used for Matter/Thread commissioning) as the login secret to access the setup form.
+- The device saves the credentials securely in non-volatile storage and reboots to join the configured Wi-Fi network.
+- If Wi-Fi connection fails, the device automatically returns to configuration mode and re-enables the AP.
+- Pressing and holding the setup button for 5 seconds resets the Wi-Fi credentials and restarts the configuration process.
+
+**Security Considerations:**
+- The configuration web page uses the device PIN for authentication, ensuring only authorized users can configure the device. This PIN is the same as used for Matter/Thread onboarding.
+- Wi-Fi credentials are stored securely using ESP-IDF’s NVS (non-volatile storage) with encryption enabled.
+## Wi-Fi Configuration (Iteration 1: Matter over Wi-Fi)
+
+- On first boot or after a Wi-Fi reset, the device starts in configuration mode and creates a temporary Wi-Fi access point (AP).
+- The AP SSID is unique to each device (e.g., `WindowSensor-<last6MAC>`).
+- The user connects to the AP using a smartphone or computer.
+- After connecting, the user accesses a simple web interface (e.g., at `192.168.4.1`) to enter their home Wi-Fi credentials (SSID and password).
+- The configuration webpage requires the device PIN (the same PIN used for Matter/Thread commissioning) as the login secret to access the setup form.
+- The device saves the credentials securely in non-volatile storage and reboots to join the configured Wi-Fi network.
+- If Wi-Fi connection fails, the device automatically returns to configuration mode and re-enables the AP.
+- Pressing and holding the setup button for 5 seconds resets the Wi-Fi credentials and restarts the configuration process.
+
+**Security Considerations:**
+- The configuration web page uses the device PIN for authentication, ensuring only authorized users can configure the device. This PIN is the same as used for Matter/Thread onboarding.
+- Wi-Fi credentials are stored securely using ESP-IDF’s NVS (non-volatile storage) with encryption enabled.
 # Smart Window Sensor System
 
 ## Overview
@@ -46,6 +212,7 @@ The device exposes two Matter endpoints:
 To securely add the device to a Matter/Thread network, a physical setup button is provided. Pressing this button puts the device into pairing mode, allowing it to be discovered and commissioned by a Border Router or Thread controller. This is required for secure onboarding and user-friendly setup in Matter ecosystems.
 
 ## Firmware
+* Firmware development is based on the Espressif IoT Development Framework (IDF)
 * Efficient polling and event-driven state detection
 * Power management (sleep modes, battery monitoring)
 * Secure wireless communication protocol (Thread/Matter)
