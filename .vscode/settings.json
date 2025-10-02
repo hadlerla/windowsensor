@@ -1,5 +1,18 @@
 {
-    "idf.pythonInstallPath": "/usr/bin/python3",
+    "idf.espIdfPath": "/home/lars/esp/v5.5/esp-idf",
+    "idf.pythonBinPath": "/home/lars/.espressif/python_env/idf5.5_py3.12_env/bin/python",
+    "idf.toolsPath": "/home/lars/.espressif",
+    "idf.adapterTargetName": "esp32c6",
+    "idf.port": "/dev/ttyACM0",
+    "idf.flashType": "UART",
+    "idf.openOcdConfigs": [
+        "board/esp32c6-builtin.cfg"
+    ],
+    "C_Cpp.intelliSenseEngine": "default",
     "editor.tabSize": 4,
-    "github.copilot.enable": true
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true
+    }
 }

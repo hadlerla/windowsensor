@@ -1,0 +1,79 @@
+menu "Window Sensor Configuration"
+
+    config BLINK_LED_TYPE
+        string "LED Type"
+        default "gpio"
+        help
+            Select the type of LED to blink.
+            Options: 'gpio' for simple GPIO LED, 'strip' for addressable LED strip.
+
+    config BLINK_LED_GPIO
+        int "LED GPIO number"
+        range 0 25
+        default 8
+        help
+            GPIO number for the LED (simple GPIO or addressable strip).
+            ESP32-C6-WROOM-1: Use GPIO 21 for external LED or GPIO 8 for RGB LED.
+            Avoid GPIO 12-17 (flash), GPIO 24-25 (USB).
+
+    config BLINK_LED_STRIP
+        bool "Use addressable LED strip"
+        default y
+        help
+            Enable this to use an addressable LED strip (WS2812, SK6812, etc.)
+
+    config BLINK_LED_STRIP_BACKEND_RMT
+        bool "LED Strip Backend: RMT"
+        depends on BLINK_LED_STRIP
+        default y
+        help
+            Use RMT peripheral for driving the LED strip.
+
+    config BLINK_LED_STRIP_BACKEND_SPI
+        bool "LED Strip Backend: SPI"
+        depends on BLINK_LED_STRIP
+        default n
+        help
+            Use SPI peripheral for driving the LED strip.
+
+    config BLINK_GPIO
+        int "Blink GPIO number"
+        range 0 25
+        default 8
+        help
+            GPIO number for blinking LED (simple GPIO or strip).
+
+    config BLINK_PERIOD
+        int "Blink period (ms)"
+        range 100 10000
+        default 1000
+        help
+            LED blink period in milliseconds.
+
+    config STATUS_LED_GPIO
+        int "Status LED GPIO number"
+        range 0 25
+        default 8
+        help
+            GPIO number for the status LED.
+            ESP32-C6-WROOM-1: Use GPIO 21 for external LED or GPIO 8 for RGB LED.
+            Avoid GPIO 12-17 (flash), GPIO 24-25 (USB).
+
+    config WINDOW_SENSOR_GPIO
+        int "Window Sensor GPIO number"
+        range 0 25
+        default 4
+        help
+            GPIO number for the window sensor input.
+            Connect a reed switch or magnetic sensor to this pin.
+            The pin will be configured with internal pull-up resistor.
+            Safe pins: GPIO 2, 3, 4, 5, 6, 7, 10, 11, 18, 19, 20, 21.
+
+    config SENSOR_POLL_PERIOD_MS
+        int "Sensor polling period (milliseconds)"
+        range 100 10000
+        default 1000
+        help
+            How often to check the window sensor state and update the status LED.
+
+endmenu

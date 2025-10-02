@@ -1,0 +1,3 @@
+## IDF Component Manager Manifest File
+dependencies:
+  led_strip: "^2.5.3"
