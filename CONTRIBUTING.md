@@ -58,4 +58,37 @@ Development is performed incrementally. For each increment:
 
 This process ensures professional, maintainable, and error-free code development, with best practices for AI-driven workflows and automated code quality.
 
-For questions, contact the Embedded Architect or project maintainer.
+
+---
+
+# ProductOwner Mode: Requirements Engineering Workflow
+
+This workflow ensures all business requirements are clearly documented, reviewed, and traceable. Please follow these instructions when contributing user stories or updating the roadmap:
+
+## User Story Creation
+- Write user stories using the Connextra format:
+   - `As a [user/role], I want [feature] so that [benefit].`
+- Define acceptance criteria using Gherkin syntax:
+   - `Given [context], When [action], Then [outcome].`
+- Use the template in `.github/chatmodes/ProductOwner-Templates/USER_STORY_TEMPLATE.md`.
+- Name user story files as `US-<number>-<short-title>.md` and store in `docs/stories/`.
+- Number user stories sequentially and uniquely.
+- Update the status field as the story progresses (Draft, Reviewed, Implemented).
+
+## Roadmap Management
+- The roadmap is maintained in `ROADMAP.md` at the project root.
+- Add new user stories in priority order.
+- Track status and milestones for each story.
+- Link each entry to the corresponding user story markdown file in `docs/stories/`.
+- Use the template in `.github/chatmodes/ProductOwner-Templates/ROADMAP_TEMPLATE.md` for structure and instructions.
+
+## Review & Approval
+- All user stories and roadmap changes must be reviewed and approved by the Product Owner.
+- Submit changes via pull request for review.
+
+## References
+- ProductOwner chatmode: `.github/chatmodes/ProductOwner.chatmode.md`
+- User story template: `.github/chatmodes/ProductOwner-Templates/USER_STORY_TEMPLATE.md`
+- Roadmap template: `.github/chatmodes/ProductOwner-Templates/ROADMAP_TEMPLATE.md`
+
+For questions, contact the Product Owner or project maintainer.
