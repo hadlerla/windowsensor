@@ -98,6 +98,38 @@ void app_main(void)
     ESP_LOGI(TAG, "Window Sensor Firmware Starting on ESP32-C6");
     ESP_LOGI(TAG, "Initial Blink Example - Foundation for Window Sensor");
     
+    // US05: Log compile-time configuration values for verification
+    ESP_LOGI(TAG, "=== Configuration (US05) ===");
+    ESP_LOGI(TAG, "Hardware Pins:");
+    ESP_LOGI(TAG, "  RGB LED GPIO: %d", CONFIG_RGB_LED_GPIO);
+    ESP_LOGI(TAG, "  AP Button GPIO: %d", CONFIG_AP_BUTTON_GPIO);
+    ESP_LOGI(TAG, "  Window Sensor GPIO: %d", CONFIG_WINDOW_SENSOR_GPIO);
+    
+    ESP_LOGI(TAG, "WiFi Configuration:");
+    ESP_LOGI(TAG, "  AP SSID Prefix: %s", CONFIG_WIFI_AP_SSID_PREFIX);
+    ESP_LOGI(TAG, "  AP Channel: %d", CONFIG_WIFI_AP_CHANNEL);
+    ESP_LOGI(TAG, "  Max Connections: %d", CONFIG_WIFI_AP_MAX_CONNECTIONS);
+    ESP_LOGI(TAG, "  Connect Timeout: %d ms", CONFIG_WIFI_CONNECT_TIMEOUT_MS);
+    ESP_LOGI(TAG, "  Max Retry Attempts: %d", CONFIG_WIFI_MAX_RETRY_ATTEMPTS);
+    
+    ESP_LOGI(TAG, "Web Server:");
+    ESP_LOGI(TAG, "  Port: %d", CONFIG_WEB_SERVER_PORT);
+    ESP_LOGI(TAG, "  Max Sessions: %d", CONFIG_WEB_SERVER_MAX_SESSIONS);
+    ESP_LOGI(TAG, "  Session Timeout: %d sec", CONFIG_WEB_SESSION_TIMEOUT_SEC);
+    
+    ESP_LOGI(TAG, "LED Configuration:");
+    ESP_LOGI(TAG, "  Brightness: %d", CONFIG_LED_BRIGHTNESS);
+    ESP_LOGI(TAG, "  Slow Blink Rate: %d ms", CONFIG_LED_BLINK_RATE_SLOW_MS);
+    ESP_LOGI(TAG, "  Fast Blink Rate: %d ms", CONFIG_LED_BLINK_RATE_FAST_MS);
+    
+    ESP_LOGI(TAG, "Device Configuration:");
+    ESP_LOGI(TAG, "  PIN Length: %d digits", CONFIG_DEVICE_PIN_LENGTH);
+    ESP_LOGI(TAG, "  AP Button Hold Time: %d ms", CONFIG_AP_BUTTON_HOLD_TIME_MS);
+    
+    ESP_LOGI(TAG, "Storage:");
+    ESP_LOGI(TAG, "  NVS Partition Size: %d KB", CONFIG_NVS_PARTITION_SIZE_KB);
+    ESP_LOGI(TAG, "============================");
+    
     /* Configure the LED peripheral according to the LED type */
     configure_led();
 

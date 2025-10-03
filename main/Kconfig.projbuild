@@ -1,79 +1,275 @@
 menu "Window Sensor Configuration"
 
-    config BLINK_LED_TYPE
-        string "LED Type"
-        default "gpio"
-        help
-            Select the type of LED to blink.
-            Options: 'gpio' for simple GPIO LED, 'strip' for addressable LED strip.
+    menu "Hardware Pin Assignments"
+        
+        config RGB_LED_GPIO
+            int "RGB LED GPIO number"
+            range 0 25
+            default 8
+            help
+                GPIO number for the WS2812 RGB LED (ESP32-C6 built-in).
+                Default: GPIO 8 (built-in RGB LED on ESP32-C6-WROOM-1).
+                Avoid: GPIO 12-17 (flash), GPIO 24-25 (USB).
+                Safe pins: GPIO 0-11, 18-23.
+        
+        config AP_BUTTON_GPIO
+            int "AP Mode Button GPIO number"
+            range 0 25
+            default 9
+            help
+                GPIO number for the AP mode activation button.
+                Press and hold this button to enter AP configuration mode.
+                Default: GPIO 9 (BOOT button on ESP32-C6-DevKitC-1).
+                The pin is configured with internal pull-up.
+        
+        config WINDOW_SENSOR_GPIO
+            int "Window Sensor GPIO number"
+            range 0 25
+            default 4
+            help
+                GPIO number for the window sensor input (M2 feature).
+                Connect a reed switch or magnetic sensor to this pin.
+                Default: GPIO 4. The pin will use internal pull-up resistor.
+                Safe pins: GPIO 2, 3, 4, 5, 6, 7, 10, 11, 18, 19, 20, 21.
+    
+    endmenu
 
-    config BLINK_LED_GPIO
-        int "LED GPIO number"
-        range 0 25
-        default 8
-        help
-            GPIO number for the LED (simple GPIO or addressable strip).
-            ESP32-C6-WROOM-1: Use GPIO 21 for external LED or GPIO 8 for RGB LED.
-            Avoid GPIO 12-17 (flash), GPIO 24-25 (USB).
+    menu "WiFi Configuration"
+        
+        config WIFI_AP_SSID_PREFIX
+            string "WiFi AP SSID prefix"
+            default "WindowSensor"
+            help
+                SSID prefix for AP mode. The full SSID will be:
+                <prefix>-<last 4 chars of MAC>
+                Example: WindowSensor-A1B2
+                Maximum length: 20 characters (to allow for MAC suffix).
+        
+        config WIFI_AP_PASSWORD
+            string "WiFi AP default password"
+            default "configure"
+            help
+                Default password for AP mode WiFi network.
+                Must be 8-63 characters. Use strong password for production.
+                This is only used when device has no stored credentials.
+                Change this for production deployments!
+        
+        config WIFI_AP_CHANNEL
+            int "WiFi AP channel"
+            range 1 13
+            default 1
+            help
+                WiFi channel for AP mode (1-13).
+                Channel 1, 6, or 11 recommended to avoid overlap.
+                Default: Channel 1.
+        
+        config WIFI_AP_MAX_CONNECTIONS
+            int "Maximum AP connections"
+            range 1 10
+            default 4
+            help
+                Maximum number of stations that can connect to AP mode.
+                Default: 4. Increase if more simultaneous connections needed.
+                Higher values consume more memory.
+        
+        config WIFI_CONNECT_TIMEOUT_MS
+            int "WiFi connection timeout (ms)"
+            range 5000 120000
+            default 30000
+            help
+                Maximum time to wait for WiFi connection before timeout.
+                Default: 30 seconds. Increase for slow networks.
+                See ADR-018 for error handling strategy.
+        
+        config WIFI_MAX_RETRY_ATTEMPTS
+            int "WiFi maximum retry attempts"
+            range 1 10
+            default 3
+            help
+                Number of connection retry attempts before returning to AP mode.
+                Default: 3 attempts. See ADR-018 for retry strategy details.
+        
+        config WIFI_RETRY_BACKOFF_BASE_MS
+            int "WiFi retry backoff base (ms)"
+            range 1000 60000
+            default 10000
+            help
+                Base delay for exponential backoff retry strategy.
+                Actual delay = base * (2 ^ retry_attempt).
+                Default: 10 seconds. See ADR-018 for error handling.
+    
+    endmenu
 
-    config BLINK_LED_STRIP
-        bool "Use addressable LED strip"
-        default y
-        help
-            Enable this to use an addressable LED strip (WS2812, SK6812, etc.)
+    menu "Web Server Configuration"
+        
+        config WEB_SERVER_PORT
+            int "Web server HTTP port"
+            range 1 65535
+            default 80
+            help
+                TCP port for the web configuration server.
+                Default: 80 (standard HTTP). Change if port conflict occurs.
+                Non-privileged ports (>1024) may be required on some systems.
+        
+        config WEB_SERVER_MAX_SESSIONS
+            int "Maximum concurrent sessions"
+            range 1 10
+            default 4
+            help
+                Maximum number of concurrent web sessions.
+                Default: 4. Each session consumes ~2KB of RAM.
+                See ADR-013 for web server architecture.
+        
+        config WEB_SESSION_TIMEOUT_SEC
+            int "Web session timeout (seconds)"
+            range 60 3600
+            default 300
+            help
+                Session timeout after successful PIN authentication.
+                Default: 5 minutes (300 seconds).
+                Sessions expire after this time of inactivity.
+        
+        config WEB_MAX_AUTH_ATTEMPTS
+            int "Maximum authentication attempts"
+            range 1 10
+            default 5
+            help
+                Maximum PIN entry attempts before lockout.
+                Default: 5 attempts. Implements brute-force protection.
+                See ADR-015 for authentication architecture.
+        
+        config WEB_AUTH_LOCKOUT_SEC
+            int "Authentication lockout time (seconds)"
+            range 10 600
+            default 60
+            help
+                Lockout duration after exceeding max auth attempts.
+                Default: 60 seconds. Prevents brute-force attacks.
+                See ADR-015 for PIN management details.
+    
+    endmenu
 
-    config BLINK_LED_STRIP_BACKEND_RMT
-        bool "LED Strip Backend: RMT"
-        depends on BLINK_LED_STRIP
-        default y
-        help
-            Use RMT peripheral for driving the LED strip.
+    menu "LED Configuration"
+        
+        config BLINK_LED_STRIP
+            bool "Use addressable LED strip"
+            default y
+            help
+                Enable this to use an addressable LED strip (WS2812, SK6812, etc.)
+                ESP32-C6-WROOM-1 has built-in WS2812 RGB LED on GPIO 8.
+                Disable for simple GPIO LED control.
+        
+        config BLINK_LED_STRIP_BACKEND_RMT
+            bool "LED Strip Backend: RMT"
+            depends on BLINK_LED_STRIP
+            default y
+            help
+                Use RMT peripheral for driving the LED strip.
+                Recommended for WS2812/SK6812 addressable LEDs.
+        
+        config BLINK_LED_STRIP_BACKEND_SPI
+            bool "LED Strip Backend: SPI"
+            depends on BLINK_LED_STRIP
+            default n
+            help
+                Use SPI peripheral for driving the LED strip.
+                Alternative to RMT, may be needed if RMT channels exhausted.
+        
+        config LED_BRIGHTNESS
+            int "LED brightness (0-255)"
+            range 0 255
+            default 64
+            help
+                Brightness level for RGB LED (0=off, 255=max).
+                Lower values save power. Default: 64 (25% brightness).
+                Full brightness (255) draws ~60mA per color channel.
+        
+        config LED_BLINK_RATE_SLOW_MS
+            int "LED slow blink period (ms)"
+            range 100 5000
+            default 1000
+            help
+                Period for slow blink pattern (1000ms = 1 Hz = 1 blink/sec).
+                Used for normal status indication (AP mode, connected, etc).
+                See ADR-016 for LED control architecture.
+        
+        config LED_BLINK_RATE_FAST_MS
+            int "LED fast blink period (ms)"
+            range 50 1000
+            default 250
+            help
+                Period for fast blink pattern (250ms = 4 Hz = 4 blinks/sec).
+                Used for error indication and urgent status.
+                See ADR-016 for LED patterns.
+        
+        # Legacy compatibility options
+        config BLINK_GPIO
+            int
+            default RGB_LED_GPIO
+        
+        config BLINK_PERIOD
+            int
+            default LED_BLINK_RATE_SLOW_MS
+        
+        config STATUS_LED_GPIO
+            int
+            default RGB_LED_GPIO
+    
+    endmenu
 
-    config BLINK_LED_STRIP_BACKEND_SPI
-        bool "LED Strip Backend: SPI"
-        depends on BLINK_LED_STRIP
-        default n
-        help
-            Use SPI peripheral for driving the LED strip.
+    menu "Device Configuration"
+        
+        config DEVICE_PIN_LENGTH
+            int "Device PIN length (digits)"
+            range 4 12
+            default 8
+            help
+                Number of digits in device PIN for web authentication.
+                Default: 8 digits. Longer PINs are more secure.
+                See ADR-015 for PIN generation and management details.
+        
+        config AP_BUTTON_HOLD_TIME_MS
+            int "AP mode button hold time (ms)"
+            range 1000 10000
+            default 5000
+            help
+                Duration to hold AP button to trigger AP mode entry.
+                Default: 5 seconds. Prevents accidental activation.
+                See US01 for AP mode activation requirements.
+        
+        config DEBOUNCE_DELAY_MS
+            int "Button debounce time (ms)"
+            range 10 200
+            default 50
+            help
+                Debounce delay for button inputs (M2 feature).
+                Default: 50ms. Adjust if false triggers occur.
+                See US07 for button debouncing details.
+        
+        # Legacy compatibility
+        config SENSOR_POLL_PERIOD_MS
+            int "Sensor polling period (ms)"
+            range 100 10000
+            default 1000
+            help
+                How often to check sensor state (legacy, for M2).
+                Default: 1000ms (1 second).
+    
+    endmenu
 
-    config BLINK_GPIO
-        int "Blink GPIO number"
-        range 0 25
-        default 8
-        help
-            GPIO number for blinking LED (simple GPIO or strip).
-
-    config BLINK_PERIOD
-        int "Blink period (ms)"
-        range 100 10000
-        default 1000
-        help
-            LED blink period in milliseconds.
-
-    config STATUS_LED_GPIO
-        int "Status LED GPIO number"
-        range 0 25
-        default 8
-        help
-            GPIO number for the status LED.
-            ESP32-C6-WROOM-1: Use GPIO 21 for external LED or GPIO 8 for RGB LED.
-            Avoid GPIO 12-17 (flash), GPIO 24-25 (USB).
-
-    config WINDOW_SENSOR_GPIO
-        int "Window Sensor GPIO number"
-        range 0 25
-        default 4
-        help
-            GPIO number for the window sensor input.
-            Connect a reed switch or magnetic sensor to this pin.
-            The pin will be configured with internal pull-up resistor.
-            Safe pins: GPIO 2, 3, 4, 5, 6, 7, 10, 11, 18, 19, 20, 21.
-
-    config SENSOR_POLL_PERIOD_MS
-        int "Sensor polling period (milliseconds)"
-        range 100 10000
-        default 1000
-        help
-            How often to check the window sensor state and update the status LED.
+    menu "Storage Configuration"
+        
+        config NVS_PARTITION_SIZE_KB
+            int "NVS partition size (KB)"
+            range 12 256
+            default 24
+            help
+                Size of NVS partition for persistent storage.
+                Must match partition table definition.
+                Default: 24KB (sufficient for M1 and M2).
+                Larger sizes support more stored data.
+                See ADR-017 for NVS namespace layout.
+    
+    endmenu
 
 endmenu

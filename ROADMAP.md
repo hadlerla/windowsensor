@@ -8,7 +8,7 @@
 
 | ID   | Title                                      | Status      | Story File                                 |
 |------|---------------------------------------------|-------------|---------------------------------------------|
-| US05 | Compile-Time Configuration of Pins/Defaults | not-started | docs/stories/US05_compile_time_config.md    |
+| US05 | Compile-Time Configuration of Pins/Defaults | ✅ completed | docs/stories/US05_compile_time_config.md    |
 | US01 | WiFi Configuration via AP Mode              | ready       | docs/stories/US01_wifi_ap_mode.md           |
 | US03 | Secure Storage of WiFi Credentials          | ready       | docs/stories/US03_secure_wifi_storage.md    |
 | US04 | RGB LED State Indication                    | ready       | docs/stories/US04_rgb_led_state.md          |
