@@ -22,6 +22,13 @@ This document provides an overview of the firmware architecture and summarizes a
 | Documentation & code standards | Doxygen-style comments, markdown docs, review checklists | [ADR-009](docs/adr/ADR-009.md) |
 | Performance optimization | Targeted profiling, event handling, hardware features | [ADR-010](docs/adr/ADR-010.md) |
 | Code quality & AI usage | clang-format, cppcheck, pre-commit hooks, AI-assisted development with review and attribution | [ADR-011](docs/adr/ADR-011.md) |
+| Compile-time configuration | ESP-IDF Kconfig for hardware pins and default parameters | [ADR-012](docs/adr/ADR-012.md) |
+| Web server architecture | ESP-IDF HTTP server with embedded files, HTTPS, session management | [ADR-013](docs/adr/ADR-013.md) |
+| WiFi state machine | Event-driven state machine with explicit states and transitions | [ADR-014](docs/adr/ADR-014.md) |
+| Authentication & PIN management | Random PIN at first boot, encrypted NVS storage, brute-force protection | [ADR-015](docs/adr/ADR-015.md) |
+| RGB LED control | Dedicated LED task with pattern queue and priority handling | [ADR-016](docs/adr/ADR-016.md) |
+| NVS partition layout | Multiple namespaces by function, consistent key naming convention | [ADR-017](docs/adr/ADR-017.md) |
+| WiFi error handling | Automatic retry with exponential backoff, error classification, graceful fallback | [ADR-018](docs/adr/ADR-018.md) |
 
 *Add new decisions as ADRs are created and accepted.*
 

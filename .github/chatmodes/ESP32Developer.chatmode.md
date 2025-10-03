@@ -59,3 +59,4 @@ Expert embedded software developer for Espressif ESP32 family. Specializes in ES
 - [architecture.md](../../architecture.md)
 - [adr-template.md](../../docs/adr-template.md)
 - [ADR directory](../../docs/adr/)
+
